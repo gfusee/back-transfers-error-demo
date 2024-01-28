@@ -1,0 +1,114 @@
+{
+    "name": "empty",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "0",
+                    "esdt": {
+                        "str:WEGLD-abcdef": "1,000"
+                    }
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "1",
+                    "newAddress": "sc:forwarder"
+                },
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "2",
+                    "newAddress": "sc:caller"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "id": "deploy",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/empty.wasm",
+                "arguments": [],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scDeploy",
+            "id": "deploy",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/empty.wasm",
+                "arguments": [],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "call with esdt value",
+            "tx": {
+                "from": "address:owner",
+                "to": "sc:caller",
+                "function": "callForward",
+                "arguments": [
+                    "sc:forwarder"
+                ],
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:WEGLD-abcdef",
+                        "nonce": "0",
+                        "value": "100"
+                    }
+                ],
+                "gasLimit": "200,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": "*",
+                "status": "",
+                "message": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "call without payment",
+            "tx": {
+                "from": "address:owner",
+                "to": "sc:caller",
+                "function": "callForward",
+                "arguments": [
+                    "sc:forwarder"
+                ],
+                "gasLimit": "200,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": "*",
+                "status": "",
+                "message": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        }
+    ]
+}
